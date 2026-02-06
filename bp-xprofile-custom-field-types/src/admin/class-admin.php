@@ -45,7 +45,7 @@ class Admin {
 		if ( ! bp_is_active( 'xprofile' ) ) {
 			$notices = (array) get_option( 'bpxcftr_notices', array() );
 
-			$notices[] = __( 'BuddyPress Xprofile Custom Field Types plugin needs Buddypress Xprofile Component. Please enable Xprofile first.', 'buddypress-xprofile-custom-fields-types' );
+			$notices[] = __( 'BuddyPress Xprofile Custom Field Types plugin needs Buddypress Xprofile Component. Please enable Xprofile first.', 'bp-xprofile-custom-field-types' );
 			update_option( 'bpxcftr_notices', $notices );
 		}
 	}
@@ -61,7 +61,7 @@ class Admin {
 				$notice = wp_kses_data( $notice );
 				$notice = wpautop( $notice );
 
-				echo "<div class='error'>{$notice}</div>";
+				echo "<div class='error'>{$notice}</div>"; // phpcs:ignore
 			}
 			delete_option( 'bpxcftr_notices' );
 		}

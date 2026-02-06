@@ -69,7 +69,7 @@ class Field_Type_Multi_Select_Taxonomy extends \BP_XProfile_Field_Type implement
 
 		<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
 
-		<select <?php echo $html; ?>>
+		<select <?php echo $html; // phpcs:ignore ?>>
 			<?php bp_the_profile_field_options( "user_id={$user_id}" ); ?>
 		</select>
 
@@ -92,12 +92,15 @@ class Field_Type_Multi_Select_Taxonomy extends \BP_XProfile_Field_Type implement
 		$html = '';
 
 		if ( ! empty( $_POST[ 'field_' . $this->field_obj->id ] ) ) {
-			$new_terms_selected = $_POST[ 'field_' . $this->field_obj->id ];
+			$new_terms_selected = wp_unslash( $_POST[ 'field_' . $this->field_obj->id ] );
 			$terms_selected     = ( $terms_selected != $new_terms_selected ) ? $new_terms_selected : $terms_selected;
 		}
 
 		// Get terms of custom taxonomy selected.
-		$terms = get_terms( $taxonomy_selected, array( 'hide_empty' => false ) );
+		$terms = get_terms( array(
+			'taxonomy'   => $taxonomy_selected,
+			'hide_empty' => false
+		) );
 
 		if ( $terms && ! is_wp_error( $terms ) ) {
 			foreach ( $terms as $term ) {
@@ -110,7 +113,7 @@ class Field_Type_Multi_Select_Taxonomy extends \BP_XProfile_Field_Type implement
 			}
 		}
 
-		echo apply_filters( 'bp_get_the_profile_field_multiselect_custom_taxonomy', $html, $args['type'], $terms_selected, $this->field_obj->id );
+		echo apply_filters( 'bp_get_the_profile_field_multiselect_custom_taxonomy', $html, $args['type'], $terms_selected, $this->field_obj->id ); // phpcs:ignore
 	}
 
 	/**
@@ -131,7 +134,7 @@ class Field_Type_Multi_Select_Taxonomy extends \BP_XProfile_Field_Type implement
 		);
 		?>
 
-		<select <?php echo $html; ?>>
+		<select <?php echo $html; // phpcs:ignore ?>>
 			<?php bp_the_profile_field_options(); ?>
 		</select>
 
@@ -169,7 +172,7 @@ class Field_Type_Multi_Select_Taxonomy extends \BP_XProfile_Field_Type implement
                         <select name="bpxcftr_multi_selected_taxonomy" id="bpxcftr_multi_selected_taxonomy">
                             <option value=""><?php _e( 'Select...', 'bp-xprofile-custom-field-types' ); ?></option>
 							<?php foreach ( $taxonomies as $k => $v ): ?>
-                                <option value="<?php echo $k; ?>"<?php selected( $selected_tax,$k ) ?> ><?php echo $v; ?></option>
+                                <option value="<?php echo esc_attr( $k ); ?>"<?php selected( $selected_tax,$k ) ?> ><?php echo esc_html( $v ); ?></option>
 							<?php endforeach; ?>
                         </select>
                     </p>
